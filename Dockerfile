@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:18.04 as builder
 
 RUN apt-get update && apt-get install -y \
   git autoconf automake bison bzip2 flex g++ gawk gcc git \
@@ -17,3 +17,5 @@ RUN mkdir /build/src && ./configure --enable-local && make
 COPY --chown=ctng:ctng ct/.config /build/ct/
 RUN ./ct-ng build
 
+FROM ubuntu:18.04
+COPY --from=builder /build/x-tools /build/x-tools
